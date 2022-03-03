@@ -1,5 +1,5 @@
 const { execSync } = require('child_process');
-const changePackageJsonDescription = require('./changePackageJsonDescription.js');
+const changePackageJsonDescription = require('./change-package-json-description.js');
 
 const main = () => {
   // Initialize the npm project

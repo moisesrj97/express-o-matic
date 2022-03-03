@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 const { writeFileSync } = require('fs');
 
-const gitIgnore = require('../resources/gitIgnore.js');
+const gitIgnore = require('../resources/git-ignore.js');
 
 const main = () => {
   execSync('git init');

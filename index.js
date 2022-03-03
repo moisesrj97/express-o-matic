@@ -2,7 +2,7 @@
 
 const inquirer = require('inquirer');
 
-const createApp = require('./routes/createApp.js');
+const createApp = require('./routes/create-app.js');
 
 async function main() {
   console.log('Welcome to express-o-matic!');

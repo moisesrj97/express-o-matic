@@ -1,14 +1,14 @@
 const { execSync } = require('child_process');
+const inquirer = require('inquirer');
 
-const createProject = require('../helpers/createProject.js');
-const addBabelTestPlugin = require('../helpers/addBabelTestPlugin.js');
-const setModuleType = require('../helpers/setModuleType.js');
-const installDependencies = require('../helpers/installDependencies.js');
-const createIndexFile = require('../helpers/createIndexFile.js');
-const createGitRepo = require('../helpers/createGitRepo.js');
+const createProject = require('../helpers/create-project.js');
+const addBabelTestPlugin = require('../helpers/add-babel-test-plugin.js');
+const setModuleType = require('../helpers/set-module-type.js');
+const installDependencies = require('../helpers/install-dependencies.js');
+const createIndexFile = require('../helpers/create-index-file.js');
+const createGitRepo = require('../helpers/create-git-repo.js');
 
 const { babelPluginName } = require('../helpers/CONSTANTS.js');
-const inquirer = require('inquirer');
 
 const main = async () => {
   // Collect inquirer questions
