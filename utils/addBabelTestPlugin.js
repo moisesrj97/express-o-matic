@@ -8,8 +8,6 @@ const main = () => {
   };
 
   writeFileSync('package.json', JSON.stringify(json, null, 2));
-
-  return '@babel/plugin-transform-modules-commonjs';
 };
 
 module.exports = main;

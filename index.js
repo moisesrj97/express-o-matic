@@ -8,6 +8,8 @@ const addBabelTestPlugin = require('./utils/addBabelTestPlugin.js');
 const setModuleType = require('./utils/setModuleType.js');
 const installDependencies = require('./utils/installDependencies.js');
 
+const { babelPluginName } = require('./utils/CONSTANTS.js');
+
 async function main() {
   console.log('Welcome to express-o-matic!');
 
@@ -47,10 +49,19 @@ async function main() {
         },
       ]);
 
+      let babelPlugin = '';
+      if (testingTools.length > 0 && moduleType === 'ES6 Modules') {
+        babelPlugin = '@babel/plugin-transform-modules-commonjs';
+      }
+
       // Install dependencies
       console.log('Module type:', moduleType);
       console.log('Dependencies to be installed:');
-      console.log([...middleWare, ...testingTools, babelPlugin].join('\n'));
+      console.log(
+        [...middleWare, ...testingTools, babelPlugin]
+          .map((e) => '- ' + e)
+          .join('\n')
+      );
 
       const { proceed } = await inquirer.prompt([
         {
@@ -79,9 +90,8 @@ async function main() {
         execSync('npm set-script start "node index.js"');
 
         // Configure testing if es6 modules selected and test utils selected
-        let babelPlugin = '';
         if (testingTools.length > 0 && moduleType === 'ES6 Modules') {
-          babelPlugin = addBabelTestPlugin();
+          addBabelTestPlugin();
         }
 
         // Install dependencies
