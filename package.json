@@ -15,5 +15,9 @@
     "tool"
   ],
   "author": "moisesrj97",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/moisesrj97/express-o-matic/issues"
+  },
+  "homepage": "https://github.com/moisesrj97/express-o-matic#readme"
 }
