@@ -51,7 +51,7 @@ async function main() {
 
       let babelPlugin = '';
       if (testingTools.length > 0 && moduleType === 'ES6 Modules') {
-        babelPlugin = '@babel/plugin-transform-modules-commonjs';
+        babelPlugin = babelPluginName;
       }
 
       // Install dependencies
