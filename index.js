@@ -2,9 +2,8 @@
 
 const inquirer = require('inquirer');
 const { execSync } = require('child_process');
-const { writeFileSync, readFileSync } = require('fs');
 
-const changePackageJsonDescription = require('./utils/changePackageJsonDescription.js');
+const createProject = require('./utils/createProject.js');
 const addBabelTestPlugin = require('./utils/addBabelTestPlugin.js');
 const setModuleType = require('./utils/setModuleType.js');
 const installDependencies = require('./utils/installDependencies.js');
@@ -45,19 +44,18 @@ async function main() {
           choices: ['jest', 'supertest'],
         },
       ]);
-      // Initialize the npm project
-      execSync('npm init -y');
 
-      // Add the express-o-matic package.json description
-      changePackageJsonDescription();
-
-      console.log(moduleType, middleWare, testingTools);
+      createProject();
 
       // Define package.json module type
       if (moduleType === 'CommonJS') {
         setModuleType('commonjs');
       } else {
         setModuleType('module');
+      }
+
+      if (testingTools.length > 0) {
+        execSync('npm set-script test jest');
       }
 
       // Configure testing if es6 modules selected and test utils selected
