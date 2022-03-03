@@ -1,6 +1,6 @@
 {
   "name": "express-o-matic",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A tool for quickly generating express applications",
   "main": "index.js",
   "scripts": {
