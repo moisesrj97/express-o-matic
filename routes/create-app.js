@@ -9,6 +9,7 @@ const createIndexFile = require('../helpers/create-index-file.js');
 const createGitRepo = require('../helpers/create-git-repo.js');
 
 const { babelPluginName } = require('../helpers/CONSTANTS.js');
+const { writeFileSync } = require('fs');
 
 const main = async () => {
   // Collect inquirer questions
@@ -91,6 +92,12 @@ const main = async () => {
 
     // Create index.js file
     createIndexFile(moduleType, middleWare);
+
+    // Create e2e test if tests
+
+    if (testingTools.length > 0) {
+      writeFileSync('e2e.test.js', '');
+    }
 
     // Create git repository
     if (repo) {
