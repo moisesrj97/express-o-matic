@@ -10,6 +10,7 @@ const installDependencies = require('./utils/installDependencies.js');
 
 async function main() {
   console.log('Welcome to express-o-matic!');
+
   const { mode } = await inquirer.prompt([
     {
       type: 'list',
@@ -24,6 +25,7 @@ async function main() {
 
   switch (mode) {
     case 'Create an express app':
+      // Collect inquirer questions
       const { moduleType, middleWare, testingTools } = await inquirer.prompt([
         {
           type: 'list',
@@ -45,26 +47,48 @@ async function main() {
         },
       ]);
 
-      createProject();
-
-      // Define package.json module type
-      if (moduleType === 'CommonJS') {
-        setModuleType('commonjs');
-      } else {
-        setModuleType('module');
-      }
-
-      if (testingTools.length > 0) {
-        execSync('npm set-script test jest');
-      }
-
-      // Configure testing if es6 modules selected and test utils selected
-      if (testingTools.length > 0 && moduleType === 'ES6 Modules') {
-        addBabelTestPlugin();
-      }
-
       // Install dependencies
-      installDependencies([...middleWare, ...testingTools]);
+      console.log('Module type:', moduleType);
+      console.log('Dependencies to be installed:');
+      console.log([...middleWare, ...testingTools, babelPlugin].join('\n'));
+
+      const { proceed } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'proceed',
+          message: 'Do you want to proceed? (Y/n)',
+          default: true,
+        },
+      ]);
+
+      if (proceed) {
+        // Create package.json with description
+        createProject();
+
+        // Define package.json module type
+        if (moduleType === 'CommonJS') {
+          setModuleType('commonjs');
+        } else {
+          setModuleType('module');
+        }
+
+        if (testingTools.length > 0) {
+          execSync('npm set-script test jest');
+        }
+
+        execSync('npm set-script start "node index.js"');
+
+        // Configure testing if es6 modules selected and test utils selected
+        let babelPlugin = '';
+        if (testingTools.length > 0 && moduleType === 'ES6 Modules') {
+          babelPlugin = addBabelTestPlugin();
+        }
+
+        // Install dependencies
+        installDependencies([...middleWare, ...testingTools, babelPlugin]);
+      } else {
+        console.log('Aborting...');
+      }
 
       break;
     case 'Create a CRUD route for my express app':

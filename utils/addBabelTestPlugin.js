@@ -1,5 +1,4 @@
 const { readFileSync, writeFileSync } = require('fs');
-const { execSync } = require('child_process');
 
 const main = () => {
   const json = JSON.parse(readFileSync('package.json'));
@@ -10,9 +9,7 @@ const main = () => {
 
   writeFileSync('package.json', JSON.stringify(json, null, 2));
 
-  execSync(`npm i @babel/plugin-transform-modules-commonjs`, {
-    stdio: 'inherit',
-  });
+  return '@babel/plugin-transform-modules-commonjs';
 };
 
 module.exports = main;
