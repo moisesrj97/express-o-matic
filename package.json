@@ -1,0 +1,19 @@
+{
+  "name": "express-o-matic",
+  "version": "0.1.0",
+  "description": "A tool for quickly generating express applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moisesrj97/express-o-matic"
+  },
+  "keywords": [
+    "express",
+    "tool"
+  ],
+  "author": "moisesrj97",
+  "license": "ISC"
+}
