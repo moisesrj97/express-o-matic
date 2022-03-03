@@ -1,6 +1,7 @@
 const { appendFileSync } = require('fs');
 
 const main = (moduleType, middleWare) => {
+  console.log('Creating index.js file...');
   if (moduleType === 'ES6 Modules') {
     // Create imports conditional on module type
     appendFileSync('index.js', "import express from 'express';\n");

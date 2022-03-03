@@ -5,13 +5,15 @@ const addBabelTestPlugin = require('../helpers/addBabelTestPlugin.js');
 const setModuleType = require('../helpers/setModuleType.js');
 const installDependencies = require('../helpers/installDependencies.js');
 const createIndexFile = require('../helpers/createIndexFile.js');
+const gitIgnore = require('../resources/gitIgnore.js');
 
 const { babelPluginName } = require('../helpers/CONSTANTS.js');
 const inquirer = require('inquirer');
+const { writeFileSync } = require('fs');
 
 const main = async () => {
   // Collect inquirer questions
-  const { moduleType, middleWare, testingTools } = await inquirer.prompt([
+  const { moduleType, middleWare, testingTools, repo } = await inquirer.prompt([
     {
       type: 'list',
       name: 'moduleType',
@@ -30,6 +32,12 @@ const main = async () => {
       message: 'What testing tools do you want to use?',
       choices: ['jest', 'supertest'],
     },
+    {
+      type: 'confirm',
+      name: 'repo',
+      message: 'Do you create a git repository? (Y/n)',
+      default: true,
+    },
   ]);
 
   let babelPlugin = '';
@@ -46,6 +54,7 @@ const main = async () => {
       .map((e) => '- ' + e)
       .join('\n')
   );
+  console.log('Repository:', repo);
 
   const { proceed } = await inquirer.prompt([
     {
@@ -83,9 +92,22 @@ const main = async () => {
 
     // Create index.js file
     createIndexFile(moduleType, middleWare);
-    console.log('Creating index.js file...');
+
+    // Create git repository
+    if (repo) {
+      execSync('git init');
+      writeFileSync('.gitignore', gitIgnore);
+      execSync('git add .');
+      execSync('git commit -m "Initial commit"');
+    }
+
+    // Final greeting
+    console.log('\n\n');
+    console.log('Your express app is ready!');
+    console.log('\n');
+    console.log("Run 'npm start' to start the server");
   } else {
-    console.log('Aborting...');
+    console.log('Aborting... See you!');
   }
 };
 
