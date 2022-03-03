@@ -12,7 +12,9 @@
   },
   "keywords": [
     "express",
-    "tool"
+    "tool",
+    "express-o-matic",
+    "crud"
   ],
   "author": "moisesrj97",
   "license": "ISC",
