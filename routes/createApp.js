@@ -5,11 +5,10 @@ const addBabelTestPlugin = require('../helpers/addBabelTestPlugin.js');
 const setModuleType = require('../helpers/setModuleType.js');
 const installDependencies = require('../helpers/installDependencies.js');
 const createIndexFile = require('../helpers/createIndexFile.js');
-const gitIgnore = require('../resources/gitIgnore.js');
+const createGitRepo = require('../helpers/createGitRepo.js');
 
 const { babelPluginName } = require('../helpers/CONSTANTS.js');
 const inquirer = require('inquirer');
-const { writeFileSync } = require('fs');
 
 const main = async () => {
   // Collect inquirer questions
@@ -95,10 +94,7 @@ const main = async () => {
 
     // Create git repository
     if (repo) {
-      execSync('git init');
-      writeFileSync('.gitignore', gitIgnore);
-      execSync('git add .');
-      execSync('git commit -m "Initial commit"');
+      createGitRepo();
     }
 
     // Final greeting
