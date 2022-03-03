@@ -1,12 +1,12 @@
 const { execSync } = require('child_process');
 
-const createProject = require('../utils/createProject.js');
-const addBabelTestPlugin = require('../utils/addBabelTestPlugin.js');
-const setModuleType = require('../utils/setModuleType.js');
-const installDependencies = require('../utils/installDependencies.js');
-const createIndexFile = require('../utils/createIndexFile.js');
+const createProject = require('../helpers/createProject.js');
+const addBabelTestPlugin = require('../helpers/addBabelTestPlugin.js.js');
+const setModuleType = require('../helpers/setModuleType.js.js');
+const installDependencies = require('../helpers/installDependencies.js');
+const createIndexFile = require('../helpers/createIndexFile.js.js');
 
-const { babelPluginName } = require('../utils/CONSTANTS.js');
+const { babelPluginName } = require('../helpers/CONSTANTS.js.js');
 const inquirer = require('inquirer');
 
 const main = async () => {
