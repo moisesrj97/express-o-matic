@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/moisesrj97/express-o-matic/issues"
   },
-  "homepage": "https://github.com/moisesrj97/express-o-matic#readme"
+  "homepage": "https://github.com/moisesrj97/express-o-matic#readme",
+  "bin": {
+    "express-o-matic": "index.js"
+  }
 }
