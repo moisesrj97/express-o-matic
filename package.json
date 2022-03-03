@@ -22,5 +22,8 @@
   "homepage": "https://github.com/moisesrj97/express-o-matic#readme",
   "bin": {
     "express-o-matic": "index.js"
+  },
+  "dependencies": {
+    "inquirer": "^8.2.0"
   }
 }
