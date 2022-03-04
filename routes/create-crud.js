@@ -60,11 +60,11 @@ const main = async () => {
   console.log(
     '\n\n',
     chalk.redBright('Remember'),
-    ' to import the router on ',
+    'to import the router on',
     chalk.blueBright('index.js'),
-    ' and add it to the ',
-    chalk.bold('(app.use())'),
-    ' method!\n\n'
+    'and add it to the',
+    chalk.bold('app.use()'),
+    'method!\n\n'
   );
 };
 
