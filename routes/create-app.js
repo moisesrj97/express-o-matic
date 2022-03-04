@@ -10,6 +10,7 @@ import createGitRepo from '../helpers/create-git-repo.js';
 
 import { babelPluginName } from '../helpers/CONSTANTS.js';
 import { writeFileSync } from 'fs';
+import chalk from 'chalk';
 
 const main = async () => {
   // Collect inquirer questions
@@ -46,15 +47,15 @@ const main = async () => {
   }
 
   // Install dependencies
-  console.log('Module type:', moduleType);
-  console.log('Dependencies to be installed:');
+  console.log(chalk.blueBright('Module type:'), moduleType);
+  console.log(chalk.blueBright('Dependencies to be installed:'));
   console.log(
     [...middleWare, ...testingTools, babelPlugin]
       .filter((e) => e !== '')
       .map((e) => '- ' + e)
       .join('\n')
   );
-  console.log('Repository:', repo);
+  console.log(chalk.blueBright('Repository:'), repo);
 
   const { proceed } = await inquirer.prompt([
     {
@@ -106,11 +107,15 @@ const main = async () => {
 
     // Final greeting
     console.log('\n\n');
-    console.log('Your express app is ready!');
+    console.log(chalk.blueBright('Your express app is ready!'));
     console.log('\n');
-    console.log("Run 'npm start' to start the server");
+    console.log(
+      'Run ',
+      chalk.greenBright('npm start'),
+      ' to start the server\n\n'
+    );
   } else {
-    console.log('Aborting... See you!');
+    console.log(chalk.redBright('Aborting... See you!\n\n'));
   }
 };
 

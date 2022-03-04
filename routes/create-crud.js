@@ -5,6 +5,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import processResourceName from '../helpers/process-resource-name.js';
 import createRouterFile from '../helpers/create-router-file.js';
 import createControllerFile from '../helpers/create-controller-file.js';
+import chalk from 'chalk';
 
 const main = async () => {
   // Ask for the resource name
@@ -57,7 +58,13 @@ const main = async () => {
   }
 
   console.log(
-    '\n\nRemember to import the router on index.js and add it to the app.use() method!\n\n'
+    '\n\n',
+    chalk.redBright('Remember'),
+    ' to import the router on ',
+    chalk.blueBright('index.js'),
+    ' and add it to the ',
+    chalk.bold('(app.use())'),
+    ' method!\n\n'
   );
 };
 
