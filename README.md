@@ -35,4 +35,8 @@ npx express-o-matic
 - jest
 - supertest
 
+## Road-map
+
+1. Add support for TypeScript express apps
+
 PR Welcome!
