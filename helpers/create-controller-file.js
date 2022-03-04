@@ -122,7 +122,7 @@ export const create${capitalizedResourceName}DB = async (new${capitalizedResourc
 };
 
 export const update${capitalizedResourceName}DB = async (id, updated${capitalizedResourceName}) => {
-  return "This route updated${capitalizedResourceName} with id " + id + " and new value " + JSON.stringify(updated${capitalizedResourceName});
+  return "This route update ${capitalizedResourceName} with id " + id + " and value " + JSON.stringify(updated${capitalizedResourceName});
 };
 
 export const delete${capitalizedResourceName}DB = async (id) => {
@@ -147,7 +147,7 @@ const create${capitalizedResourceName}DB = async (new${capitalizedResourceName})
 };
 
 const update${capitalizedResourceName}DB = async (id, updated${capitalizedResourceName}) => {
-  return "This route updated${capitalizedResourceName} with id " + id + " and new value " + JSON.stringify(updated${capitalizedResourceName});
+  return "This route update ${capitalizedResourceName} with id " + id + " and value " + JSON.stringify(updated${capitalizedResourceName});
 };
 
 const delete${capitalizedResourceName}DB = async (id) => {
@@ -208,7 +208,7 @@ export const get${capitalizedResourceName} = (req, res) => {
 
 export const create${capitalizedResourceName} = (req, res) => {
   create${capitalizedResourceName}DB(req.body)
-    .then((data) => res.status(201).send(data));
+    .then((data) => res.status(200).send(data));
 };
 
 export const update${capitalizedResourceName} = (req, res) => {
@@ -218,7 +218,7 @@ export const update${capitalizedResourceName} = (req, res) => {
 
 export const delete${capitalizedResourceName} = (req, res) => {
   delete${capitalizedResourceName}DB(req.params.id)
-    .then(() => res.status(204).send());
+    .then(() => res.status(200).send("This route delete ${capitalizedResourceName} with id " + req.params.id);
 };
 
 `
@@ -236,7 +236,7 @@ const get${capitalizedResourceName} = (req, res) => {
 };
 
 const create${capitalizedResourceName} = (req, res) => {
-  create${capitalizedResourceName}DB(req.body).then((data) => res.status(201).send(data));
+  create${capitalizedResourceName}DB(req.body).then((data) => res.status(200).send(data));
 };
 
 const update${capitalizedResourceName} = (req, res) => {
@@ -244,7 +244,7 @@ const update${capitalizedResourceName} = (req, res) => {
 };
 
 const delete${capitalizedResourceName} = (req, res) => {
-  delete${capitalizedResourceName}DB(req.params.id).then(() => res.status(204).send());
+  delete${capitalizedResourceName}DB(req.params.id).then(() => res.status(200).send("This route delete ${capitalizedResourceName} with id " + req.params.id));
 };
 
 module.exports = {
