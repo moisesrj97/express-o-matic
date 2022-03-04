@@ -1,7 +1,13 @@
 import inquirer from 'inquirer';
 import processResourceName from '../helpers/process-resource-name.js';
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import {
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  existsSync,
+  appendFileSync,
+} from 'fs';
 import chalk from 'chalk';
 
 const main = async () => {
@@ -51,13 +57,44 @@ module.exports = ${camelCaseResourceName};
     );
   }
 
-  if (
-    dependencies.hasOwnProperty('jest') ||
-    dependencies.hasOwnProperty('supertest')
-  ) {
-    writeFileSync(
+  if (dependencies.hasOwnProperty('jest')) {
+    if (moduleType === 'module') {
+      appendFileSync(
+        `middlewares/${kebabCaseResourceName}.middleware.test.js`,
+        `import { ${camelCaseResourceName}Middleware } from './${kebabCaseResourceName}.middleware.js';\n\n`
+      );
+    } else {
+      appendFileSync(
+        `middlewares/${kebabCaseResourceName}.middleware.test.js`,
+        `const { ${camelCaseResourceName}Middleware } = require('./${kebabCaseResourceName}.middleware.js');\n\n`
+      );
+    }
+    appendFileSync(
       `middlewares/${kebabCaseResourceName}.middleware.test.js`,
-      ''
+      `describe('Given the controller', () => {
+  let req;
+  let res;
+  let next;
+  beforeEach(() => {
+      req = { params: {} };
+      res = {};
+      res.send = jest.fn().mockReturnValue(res);
+      res.json = jest.fn().mockReturnValue(res);
+      res.status = jest.fn().mockReturnValue(res);
+      next = jest.fn();
+  });
+
+  describe('When it is called is called', () => {
+    test('It should return data', () => {
+      res = {status: () => res, send: jest.fn()};
+
+      ${camelCaseResourceName}Middleware(req, res, next);
+      expect(next).toHaveBeenCalled();
+    });
+  });
+});
+
+`
     );
   }
 
