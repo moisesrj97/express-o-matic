@@ -1,5 +1,6 @@
 {
   "name": "express-o-matic",
+  "type": "module",
   "version": "1.1.0",
   "description": "A tool for quickly generating express applications",
   "main": "index.js",
@@ -26,6 +27,7 @@
     "express-o-matic": "index.js"
   },
   "dependencies": {
+    "chalk": "^5.0.0",
     "inquirer": "^8.2.0"
   }
 }
