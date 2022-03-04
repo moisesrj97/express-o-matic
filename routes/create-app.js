@@ -9,7 +9,7 @@ import createIndexFile from '../helpers/create-index-file.js';
 import createGitRepo from '../helpers/create-git-repo.js';
 
 import { babelPluginName } from '../helpers/CONSTANTS.js';
-import { writeFileSync } from 'fs';
+import { appendFileSync, writeFileSync } from 'fs';
 import chalk from 'chalk';
 
 const main = async () => {
@@ -96,8 +96,41 @@ const main = async () => {
 
     // Create e2e test if tests
 
-    if (testingTools.length > 0) {
-      writeFileSync('e2e.test.js', '');
+    if (testingTools.includes('supertest')) {
+      if (moduleType === 'ES6 Modules') {
+        appendFileSync(
+          'e2e.test.js',
+          `import { app, server } from './index.js';
+import request from 'supertest';
+
+
+`
+        );
+      } else {
+        appendFileSync(
+          'e2e.test.js',
+          `const { app, server } = require('./index.js');
+const request = require('supertest');
+
+`
+        );
+      }
+      appendFileSync(
+        'e2e.test.js',
+        `describe('Given the express application', () => {
+  afterEach(() => {
+    server.close();
+  });
+  describe('When GET /', () => {
+    test('It returns Hello World', async () => {
+      const res = await request(app).get('/');
+      expect(res.status).toBe(200);
+      expect(res.text).toBe('Hello World!');
+    });
+  });
+});
+`
+      );
     }
 
     // Create git repository
