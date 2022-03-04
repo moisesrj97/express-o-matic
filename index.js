@@ -4,6 +4,7 @@ const inquirer = require('inquirer');
 
 const createApp = require('./routes/create-app.js');
 const createCrud = require('./routes/create-crud.js');
+const createMiddleware = require('./routes/create-middleware.js');
 
 async function main() {
   console.log('Welcome to express-o-matic!');
@@ -16,6 +17,7 @@ async function main() {
       choices: [
         'Create an express app',
         'Create a CRUD route for my express app',
+        'Create a middleware',
       ],
     },
   ]);
@@ -26,6 +28,9 @@ async function main() {
       break;
     case 'Create a CRUD route for my express app':
       await createCrud();
+      break;
+    case 'Create a middleware':
+      await createMiddleware();
       break;
     default:
       console.log('Invalid mode');
