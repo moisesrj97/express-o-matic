@@ -27,7 +27,7 @@ const main = async () => {
   let { kebabCaseResourceName, capitalizedResourceName } =
     processResourceName(resourceName);
 
-  // Check module type
+  // Check module type and testing
   const moduleType = JSON.parse(readFileSync('package.json')).type;
   const dependencies = JSON.parse(readFileSync('package.json')).dependencies;
 
