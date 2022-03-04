@@ -1,7 +1,7 @@
-const { execSync } = require('child_process');
-const { writeFileSync } = require('fs');
+import { execSync } from 'child_process';
+import { writeFileSync } from 'fs';
 
-const gitIgnore = require('../resources/git-ignore.js');
+import gitIgnore from '../resources/git-ignore.js';
 
 const main = () => {
   execSync('git init');
@@ -10,4 +10,4 @@ const main = () => {
   execSync('git commit -m "Initial commit"');
 };
 
-module.exports = main;
+export default main;

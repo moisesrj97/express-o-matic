@@ -1,10 +1,10 @@
-const inquirer = require('inquirer');
+import inquirer from 'inquirer';
 
-const { readFileSync, writeFileSync } = require('fs');
+import { readFileSync, writeFileSync } from 'fs';
 
-const processResourceName = require('../helpers/process-resource-name.js');
-const createRouterFile = require('../helpers/create-router-file.js');
-const createControllerFile = require('../helpers/create-controller-file.js');
+import processResourceName from '../helpers/process-resource-name.js';
+import createRouterFile from '../helpers/create-router-file.js';
+import createControllerFile from '../helpers/create-controller-file.js';
 
 const main = async () => {
   // Ask for the resource name
@@ -61,4 +61,4 @@ const main = async () => {
   );
 };
 
-module.exports = main;
+export default main;

@@ -29,4 +29,4 @@ const main = (resourceName) => {
   };
 };
 
-module.exports = main;
+export default main;

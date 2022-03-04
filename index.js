@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
-const inquirer = require('inquirer');
+import chalk from 'chalk';
+import inquirer from 'inquirer';
 
-const createApp = require('./routes/create-app.js');
-const createCrud = require('./routes/create-crud.js');
-const createMiddleware = require('./routes/create-middleware.js');
+import createApp from './routes/create-app.js';
+import createCrud from './routes/create-crud.js';
+import createMiddleware from './routes/create-middleware.js';
 
 async function main() {
-  console.log('Welcome to express-o-matic!');
+  console.log(chalk.blueBright('Welcome to express-o-matic!'));
 
   const { mode } = await inquirer.prompt([
     {

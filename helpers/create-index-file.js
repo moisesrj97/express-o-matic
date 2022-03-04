@@ -1,4 +1,4 @@
-const { appendFileSync } = require('fs');
+import { appendFileSync } from 'fs';
 
 const main = (moduleType, middleWare) => {
   console.log('Creating index.js file...');
@@ -51,4 +51,4 @@ app.use("/", (error, res, req, next) => {
   );
 };
 
-module.exports = main;
+export default main;

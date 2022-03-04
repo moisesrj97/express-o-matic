@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 const main = () => {
   const json = JSON.parse(fs.readFileSync('package.json'));
@@ -8,4 +8,4 @@ const main = () => {
   fs.writeFileSync('package.json', JSON.stringify(json, null, 2));
 };
 
-module.exports = main;
+export default main;

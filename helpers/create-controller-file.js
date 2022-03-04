@@ -1,4 +1,4 @@
-const { existsSync, mkdirSync, appendFileSync } = require('fs');
+import { existsSync, mkdirSync, appendFileSync } from 'fs';
 
 const main = (
   dbExtract,
@@ -261,4 +261,4 @@ module.exports = {
   }
 };
 
-module.exports = main;
+export default main;

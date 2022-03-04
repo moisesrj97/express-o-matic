@@ -1,5 +1,5 @@
-const { readFileSync, writeFileSync } = require('fs');
-const { babelPluginName } = require('./CONSTANTS');
+import { readFileSync, writeFileSync } from 'fs';
+import { babelPluginName } from './CONSTANTS';
 
 const main = () => {
   const json = JSON.parse(readFileSync('package.json'));
@@ -11,4 +11,4 @@ const main = () => {
   writeFileSync('package.json', JSON.stringify(json, null, 2));
 };
 
-module.exports = main;
+export default main;

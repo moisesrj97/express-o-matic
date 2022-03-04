@@ -1,4 +1,4 @@
-const { existsSync, mkdirSync, appendFileSync } = require('fs');
+import { existsSync, mkdirSync, appendFileSync } from 'fs';
 
 const main = (moduleType, kebabCaseResourceName, capitalizedResourceName) => {
   // Check if routes folder exists and create it if not
@@ -67,4 +67,4 @@ const {
   }
 };
 
-module.exports = main;
+export default main;

@@ -1,15 +1,15 @@
-const { execSync } = require('child_process');
-const inquirer = require('inquirer');
+import { execSync } from 'child_process';
+import inquirer from 'inquirer';
 
-const createProject = require('../helpers/create-project.js');
-const addBabelTestPlugin = require('../helpers/add-babel-test-plugin.js');
-const setModuleType = require('../helpers/set-module-type.js');
-const installDependencies = require('../helpers/install-dependencies.js');
-const createIndexFile = require('../helpers/create-index-file.js');
-const createGitRepo = require('../helpers/create-git-repo.js');
+import createProject from '../helpers/create-project.js';
+import addBabelTestPlugin from '../helpers/add-babel-test-plugin.js';
+import setModuleType from '../helpers/set-module-type.js';
+import installDependencies from '../helpers/install-dependencies.js';
+import createIndexFile from '../helpers/create-index-file.js';
+import createGitRepo from '../helpers/create-git-repo.js';
 
-const { babelPluginName } = require('../helpers/CONSTANTS.js');
-const { writeFileSync } = require('fs');
+import { babelPluginName } from '../helpers/CONSTANTS.js';
+import { writeFileSync } from 'fs';
 
 const main = async () => {
   // Collect inquirer questions
@@ -114,4 +114,4 @@ const main = async () => {
   }
 };
 
-module.exports = main;
+export default main;

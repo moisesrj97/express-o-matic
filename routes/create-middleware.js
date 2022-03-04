@@ -1,7 +1,7 @@
-const inquirer = require('inquirer');
-const processResourceName = require('../helpers/process-resource-name.js');
+import inquirer from 'inquirer';
+import processResourceName from '../helpers/process-resource-name.js';
 
-const { readFileSync, writeFileSync, mkdirSync, existsSync } = require('fs');
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 
 const main = async () => {
   let { middlewareName } = await inquirer.prompt([
@@ -51,4 +51,4 @@ module.exports = ${camelCaseResourceName};
   }
 };
 
-module.exports = main;
+export default main;

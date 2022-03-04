@@ -1,5 +1,5 @@
-const { execSync } = require('child_process');
-const changePackageJsonDescription = require('./change-package-json-description.js');
+import { execSync } from 'child_process';
+import changePackageJsonDescription from './change-package-json-description.js';
 
 const main = () => {
   // Initialize the npm project
@@ -9,4 +9,4 @@ const main = () => {
   changePackageJsonDescription();
 };
 
-module.exports = main;
+export default main;

@@ -1,4 +1,4 @@
-const { writeFileSync, readFileSync } = require('fs');
+import { writeFileSync, readFileSync } from 'fs';
 
 const main = (type) => {
   const json = JSON.parse(readFileSync('package.json'));
@@ -6,4 +6,4 @@ const main = (type) => {
   writeFileSync('package.json', JSON.stringify(json, null, 2));
 };
 
-module.exports = main;
+export default main;
