@@ -19,6 +19,21 @@ const main = (
   update${capitalizedResourceName}, 
   delete${capitalizedResourceName},
 } from '../controllers/${kebabCaseResourceName}.controller.js';
+${
+  dbExtract
+    ? `
+import {
+  getAll${capitalizedResourceName}sDB, 
+  get${capitalizedResourceName}DB, 
+  create${capitalizedResourceName}DB, 
+  update${capitalizedResourceName}DB, 
+  delete${capitalizedResourceName}DB,
+} from '../db/${kebabCaseResourceName}.db.js';
+
+`
+    : ''
+}
+${dbExtract ? `jest.mock("../db/${kebabCaseResourceName}.db.js")` : ''}
 
 
 `
@@ -33,6 +48,21 @@ const main = (
   update${capitalizedResourceName}, 
   delete${capitalizedResourceName},
 } = require ('../controllers/${kebabCaseResourceName}.controller.js');
+${
+  dbExtract
+    ? `
+const {
+  getAll${capitalizedResourceName}sDB, 
+  get${capitalizedResourceName}DB, 
+  create${capitalizedResourceName}DB, 
+  update${capitalizedResourceName}DB, 
+  delete${capitalizedResourceName}DB,
+} = require ('../db/${kebabCaseResourceName}.db.js');
+
+`
+    : ''
+}
+${dbExtract ? `jest.mock("../db/${kebabCaseResourceName}.db.js")` : ''}
 
 
 `
@@ -52,6 +82,18 @@ const main = (
       res.json = jest.fn().mockReturnValue(res);
       res.status = jest.fn().mockReturnValue(res);
       next = jest.fn();
+      ${
+        dbExtract
+          ? `
+      getAll${capitalizedResourceName}sDB.mockResolvedValue("This route get all ${capitalizedResourceName}s");
+      get${capitalizedResourceName}DB.mockResolvedValue("This route get ${capitalizedResourceName} with id " + 1);
+      create${capitalizedResourceName}DB.mockResolvedValue("This route create a ${capitalizedResourceName} with value " + JSON.stringify({test: "test"}));
+      update${capitalizedResourceName}DB.mockResolvedValue("This route update ${capitalizedResourceName} with id " + 1+ " and value " + JSON.stringify({test: "test"}));
+      delete${capitalizedResourceName}DB.mockResolvedValue("This route delete ${capitalizedResourceName} with id " + 1);
+      
+      `
+          : ''
+      }
   });
 
   describe('When getAll is called', () => {
