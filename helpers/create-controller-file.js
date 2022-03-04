@@ -43,7 +43,7 @@ export const update${capitalizedResourceName} = (req, res) => {
     .send("This route update ${capitalizedResourceName} with id " + req.params.id + " and value " + JSON.stringify(req.body));
 };
 
-const delete${capitalizedResourceName} = (req, res) => {
+export const delete${capitalizedResourceName} = (req, res) => {
   res
     .status(200)
     .send("This route delete ${capitalizedResourceName} with id " + req.params.id);
