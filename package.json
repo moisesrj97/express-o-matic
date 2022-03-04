@@ -1,7 +1,7 @@
 {
   "name": "express-o-matic",
   "type": "module",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A tool for quickly generating express applications",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,10 @@
     "express",
     "tool",
     "express-o-matic",
-    "crud"
+    "crud",
+    "nodejs",
+    "javascript",
+    "generator"
   ],
   "author": "moisesrj97",
   "license": "ISC",
