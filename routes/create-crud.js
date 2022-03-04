@@ -5,7 +5,7 @@ import { readFileSync } from 'fs';
 import processResourceName from '../helpers/process-resource-name.js';
 import createRouterFile from '../helpers/create-router-file.js';
 import createControllerFile from '../helpers/create-controller-file.js';
-import generateRouterTestFile from '../helpers/generate-router-test-file.js';
+import generateRouterAndControllerTestFile from '../helpers/generate-router-and-controller-test-file.js';
 import chalk from 'chalk';
 
 const main = async () => {
@@ -44,7 +44,8 @@ const main = async () => {
     capitalizedResourceName
   );
 
-  generateRouterTestFile(
+  // Generate router and controller test file
+  generateRouterAndControllerTestFile(
     dependencies,
     dbExtract,
     moduleType,

@@ -218,7 +218,7 @@ export const update${capitalizedResourceName} = (req, res) => {
 
 export const delete${capitalizedResourceName} = (req, res) => {
   delete${capitalizedResourceName}DB(req.params.id)
-    .then(() => res.status(200).send("This route delete ${capitalizedResourceName} with id " + req.params.id);
+    .then(() => res.status(200).send("This route delete ${capitalizedResourceName} with id " + req.params.id));
 };
 
 `
