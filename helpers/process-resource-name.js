@@ -5,7 +5,6 @@ const main = (resourceName) => {
 
   // Generate camelCase and kebabCase resource name
   if (resourceName.match(/[A-Z]+/)) {
-    console.log('Resource name has uppercases');
     camelCaseResourceName = resourceName;
     kebabCaseResourceName = resourceName
       .replace(/([A-Z])/g, '-$1')
@@ -14,7 +13,6 @@ const main = (resourceName) => {
       camelCaseResourceName.charAt(0).toUpperCase() +
       camelCaseResourceName.slice(1);
   } else {
-    console.log('Resource name has no uppercases');
     kebabCaseResourceName = resourceName;
     camelCaseResourceName = resourceName.replace(/-([a-z])/g, (g) =>
       g[1].toUpperCase()
