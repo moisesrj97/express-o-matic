@@ -2,6 +2,7 @@ import inquirer from 'inquirer';
 import processResourceName from '../helpers/process-resource-name.js';
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import chalk from 'chalk';
 
 const main = async () => {
   let { middlewareName } = await inquirer.prompt([
@@ -49,6 +50,18 @@ module.exports = ${camelCaseResourceName};
 `
     );
   }
+
+  if (
+    dependencies.hasOwnProperty('jest') ||
+    dependencies.hasOwnProperty('supertest')
+  ) {
+    writeFileSync(
+      `middlewares/${kebabCaseResourceName}.middleware.test.js`,
+      ''
+    );
+  }
+
+  console.log(chalk.blueBright('Middleware created and ready!'));
 };
 
 export default main;
