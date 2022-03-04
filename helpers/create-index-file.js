@@ -30,7 +30,7 @@ const main = (moduleType, middleWare) => {
   appendFileSync(
     'index.js',
     `
-app.get("/", (res, req) => {
+app.get("/", (req, res) => {
   res.status(200).send("Hello World!");
 });
 `
@@ -38,7 +38,7 @@ app.get("/", (res, req) => {
   appendFileSync(
     'index.js',
     `
-app.use("/", (error, res, req, next) => {
+app.use("/", (error, req, res, next) => {
   res.status(500).send(error);
 });
 
