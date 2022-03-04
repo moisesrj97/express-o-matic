@@ -10,12 +10,31 @@ const main = (moduleType, kebabCaseResourceName, capitalizedResourceName) => {
   if (moduleType === 'module') {
     appendFileSync(
       `routes/${kebabCaseResourceName}.router.js`,
-      `import express from 'express';\nimport { getAll${capitalizedResourceName}s, get${capitalizedResourceName}, create${capitalizedResourceName}, update${capitalizedResourceName}, delete${capitalizedResourceName} } from '../controllers/${kebabCaseResourceName}.controller.js'\n\n`
+      `import express from 'express';
+import { 
+  getAll${capitalizedResourceName}s, 
+  get${capitalizedResourceName}, 
+  create${capitalizedResourceName}, 
+  update${capitalizedResourceName}, 
+  delete${capitalizedResourceName} 
+} from '../controllers/${kebabCaseResourceName}.controller.js'
+
+`
     );
   } else {
     appendFileSync(
       `routes/${kebabCaseResourceName}.router.js`,
-      `const express = require('express');\nconst { getAll${capitalizedResourceName}s, get${capitalizedResourceName}, create${capitalizedResourceName}, update${capitalizedResourceName}, delete${capitalizedResourceName} } = require('../controllers/${kebabCaseResourceName}.controller.js');\n\n`
+      `const express = require('express');
+   
+const { 
+  getAll${capitalizedResourceName}s, 
+  get${capitalizedResourceName}, 
+  create${capitalizedResourceName}, 
+  update${capitalizedResourceName}, 
+  delete${capitalizedResourceName} 
+} = require('../controllers/${kebabCaseResourceName}.controller.js');
+
+`
     );
   }
 
@@ -26,7 +45,14 @@ const main = (moduleType, kebabCaseResourceName, capitalizedResourceName) => {
   );
   appendFileSync(
     `routes/${kebabCaseResourceName}.router.js`,
-    `router\n  .get('/', getAll${capitalizedResourceName}s)\n  .get('/:id', get${capitalizedResourceName})\n  .post('/', create${capitalizedResourceName})\n  .put('/:id', update${capitalizedResourceName})\n  .delete('/:id', delete${capitalizedResourceName});\n\n`
+    `router
+  .get('/', getAll${capitalizedResourceName}s)
+  .get('/:id', get${capitalizedResourceName})
+  .post('/', create${capitalizedResourceName})
+  .put('/:id', update${capitalizedResourceName})
+  .delete('/:id', delete${capitalizedResourceName});
+  
+`
   );
   if (moduleType === 'module') {
     appendFileSync(
