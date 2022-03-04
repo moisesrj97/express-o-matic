@@ -24,11 +24,8 @@ const main = async () => {
   }
 
   // Process resource name
-  let {
-    camelCaseResourceName,
-    kebabCaseResourceName,
-    capitalizedResourceName,
-  } = processResourceName(resourceName);
+  let { kebabCaseResourceName, capitalizedResourceName } =
+    processResourceName(resourceName);
 
   // Check module type
   const moduleType = JSON.parse(readFileSync('package.json')).type;

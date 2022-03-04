@@ -25,7 +25,6 @@ const main = (resourceName) => {
   }
 
   return {
-    camelCaseResourceName,
     kebabCaseResourceName,
     capitalizedResourceName,
   };
