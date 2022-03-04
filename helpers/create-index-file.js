@@ -16,7 +16,12 @@ const main = (moduleType, middleWare) => {
   }
 
   // Create express app
-  appendFileSync('index.js', `\nconst app = express();\n\n`);
+  if (moduleType === 'ES6 Modules') {
+    appendFileSync('index.js', `\nexport const app = express();\n\n`);
+  } else {
+    appendFileSync('index.js', `\nconst app = express();\n\n`);
+  }
+
   appendFileSync('index.js', 'app.use(express.json());\n');
   middleWare.forEach((e) => {
     switch (e) {
@@ -45,10 +50,17 @@ app.use("/", (error, req, res, next) => {
 `
   );
   appendFileSync('index.js', 'const port = process.env.PORT || 3000;\n\n');
-  appendFileSync(
-    'index.js',
-    'app.listen(port, () => console.log(`Server running on port ${port}`));\n'
-  );
+  if (moduleType === 'ES6 Modules') {
+    appendFileSync(
+      'index.js',
+      'export const server = app.listen(port, () => console.log(`Server running on port ${port}`));\n'
+    );
+  } else {
+    appendFileSync(
+      'index.js',
+      'const server = app.listen(port, () => console.log(`Server running on port ${port}`));\n\nmodule.exports = {app, server};\n\n'
+    );
+  }
 };
 
 export default main;
