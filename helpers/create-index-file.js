@@ -16,7 +16,7 @@ const main = (moduleType, middleWare) => {
   }
 
   // Create express app
-  appendFileSync('index.js', `const app = express();\n\n`);
+  appendFileSync('index.js', `\nconst app = express();\n\n`);
   appendFileSync('index.js', 'app.use(express.json());\n');
   middleWare.forEach((e) => {
     switch (e) {
@@ -29,7 +29,20 @@ const main = (moduleType, middleWare) => {
   });
   appendFileSync(
     'index.js',
-    '\napp.get("/", (res, req) => {\n  res.status(200).send("Hello World!");\n});\n\n'
+    `
+app.get("/", (res, req) => {
+  res.status(200).send("Hello World!");
+});
+`
+  );
+  appendFileSync(
+    'index.js',
+    `
+app.use("/", (error, res, req, next) => {
+  res.status(500).send(error);
+});
+
+`
   );
   appendFileSync('index.js', 'const port = process.env.PORT || 3000;\n\n');
   appendFileSync(
