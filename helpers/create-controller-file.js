@@ -11,9 +11,12 @@ const main = (
     mkdirSync('controllers');
   }
 
+  // Check if database connection extraction is enabled
   if (!dbExtract) {
+    // If it is not enabled, controllers will handle all the logic
     // Create controller file content
     if (moduleType === 'module') {
+      // If module type is ES6, use ES6 syntax for exports
       appendFileSync(
         `controllers/${kebabCaseResourceName}.controller.js`,
         `export const getAll${capitalizedResourceName}s = (req, res) => {
@@ -49,6 +52,7 @@ const delete${capitalizedResourceName} = (req, res) => {
 `
       );
     } else {
+      // If module type is commonjs, use commonjs syntax for exports
       appendFileSync(
         `controllers/${kebabCaseResourceName}.controller.js`,
         `const getAll${capitalizedResourceName}s = (req, res) => {
@@ -93,13 +97,16 @@ module.exports = {
       );
     }
   } else {
+    // If db base connection file is enabled, db files will handle
+    // the connection and return info to the controllers
+
     // Check if db folder exists and create it if not
     if (!existsSync('db')) {
       mkdirSync('db');
     }
 
     if (moduleType === 'module') {
-      // Create db file content
+      // Create db file content with es6 exports
       appendFileSync(
         `db/${kebabCaseResourceName}.db.js`,
         `export const getAll${capitalizedResourceName}sDB = async () => {
@@ -124,7 +131,7 @@ export const delete${capitalizedResourceName}DB = async (id) => {
 `
       );
     } else {
-      // Create db file content
+      // Create db file content with commonjs exports
       appendFileSync(
         `db/${kebabCaseResourceName}.db.js`,
         `const getAll${capitalizedResourceName}sDB = async () => {
@@ -159,7 +166,8 @@ module.exports = {
       );
     }
 
-    // Create controller
+    // Create controller file
+    // Imports depending of module type
     if (moduleType === 'module') {
       appendFileSync(
         `controllers/${kebabCaseResourceName}.controller.js`,
@@ -185,7 +193,7 @@ module.exports = {
     }
 
     if (moduleType === 'module') {
-      // Create controller file content
+      // Create controller file content with es6 exports
       appendFileSync(
         `controllers/${kebabCaseResourceName}.controller.js`,
         `export const getAll${capitalizedResourceName}s = (req, res) => {
@@ -216,7 +224,7 @@ export const delete${capitalizedResourceName} = (req, res) => {
 `
       );
     } else {
-      // Create controller file content
+      // Create controller file content with commonjs exports
       appendFileSync(
         `controllers/${kebabCaseResourceName}.controller.js`,
         `const getAll${capitalizedResourceName}s = (req, res) => {
