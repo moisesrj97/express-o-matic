@@ -131,4 +131,4 @@ dist
 .pnp.*
 `;
 
-module.exports = gitIgnore;
+export default gitIgnore;
