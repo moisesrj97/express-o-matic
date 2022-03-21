@@ -10,6 +10,8 @@ No more...
 
 Inspired by CRUD generators of NestJS.
 
+TypeScript Support!
+
 ### Usage
 
 #### Install globally
@@ -37,6 +39,6 @@ npx express-o-matic
 
 ## Road-map
 
-1. Add support for TypeScript express apps
+Currently empty!
 
 PR Welcome!

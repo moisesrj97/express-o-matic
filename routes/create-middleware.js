@@ -1,13 +1,7 @@
 import inquirer from 'inquirer';
 import processResourceName from '../helpers/utils/process-resource-name.js';
 
-import {
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-  existsSync,
-  appendFileSync,
-} from 'fs';
+import { readFileSync, mkdirSync, existsSync, appendFileSync } from 'fs';
 import chalk from 'chalk';
 
 const main = async () => {
@@ -22,14 +16,34 @@ const main = async () => {
   const moduleType = JSON.parse(readFileSync('package.json')).type;
   const dependencies = JSON.parse(readFileSync('package.json')).dependencies;
 
-  if (!existsSync('middlewares')) {
-    mkdirSync('middlewares');
+  const useTypescript = dependencies.typescript;
+  const fileExtension = useTypescript ? 'ts' : 'js';
+
+  if (!existsSync('src')) {
+    mkdirSync('src');
   }
 
-  if (moduleType === 'module') {
-    writeFileSync(
-      `middlewares/${kebabCaseResourceName}.middleware.js`,
-      `export const ${camelCaseResourceName}Middleware = (req, res, next) => {
+  if (!existsSync('src/middlewares')) {
+    mkdirSync('src/middlewares');
+  }
+
+  if (useTypescript) {
+    appendFileSync(
+      `src/middlewares/${kebabCaseResourceName}.middleware.${fileExtension}`,
+      `import { Request, Response, NextFunction } from 'express';
+      
+      `
+    );
+  }
+
+  if (moduleType === 'module' || useTypescript) {
+    appendFileSync(
+      `src/middlewares/${kebabCaseResourceName}.middleware.${fileExtension}`,
+      `export const ${camelCaseResourceName}Middleware = (req${
+        useTypescript ? ': Request' : ''
+      }, res${useTypescript ? ': Response' : ''}, next${
+        useTypescript ? ': NextFunction' : ''
+      }) => {
   try {
     //Do something
     next();
@@ -41,8 +55,8 @@ const main = async () => {
 `
     );
   } else {
-    writeFileSync(
-      `middlewares/${kebabCaseResourceName}.middleware.js`,
+    appendFileSync(
+      `src/middlewares/${kebabCaseResourceName}.middleware.${fileExtension}`,
       `const ${camelCaseResourceName}Middleware = (req, res, next) => {
   try {
     //Do something
@@ -58,23 +72,25 @@ module.exports = ${camelCaseResourceName};
   }
 
   if (dependencies.hasOwnProperty('jest')) {
-    if (moduleType === 'module') {
+    if (moduleType === 'module' || useTypescript) {
       appendFileSync(
-        `middlewares/${kebabCaseResourceName}.middleware.test.js`,
-        `import { ${camelCaseResourceName}Middleware } from './${kebabCaseResourceName}.middleware.js';\n\n`
+        `src/middlewares/${kebabCaseResourceName}.middleware.test.${fileExtension}`,
+        `import { ${camelCaseResourceName}Middleware } from './${kebabCaseResourceName}.middleware${
+          useTypescript ? '' : '.js'
+        }';\n\n`
       );
     } else {
       appendFileSync(
-        `middlewares/${kebabCaseResourceName}.middleware.test.js`,
+        `src/middlewares/${kebabCaseResourceName}.middleware.test.${fileExtension}`,
         `const { ${camelCaseResourceName}Middleware } = require('./${kebabCaseResourceName}.middleware.js');\n\n`
       );
     }
     appendFileSync(
-      `middlewares/${kebabCaseResourceName}.middleware.test.js`,
+      `src/middlewares/${kebabCaseResourceName}.middleware.test.${fileExtension}`,
       `describe('Given the controller', () => {
-  let req;
-  let res;
-  let next;
+  let req${useTypescript ? ': any' : ''};
+  let res${useTypescript ? ': any' : ''};
+  let next${useTypescript ? ': any' : ''};
   beforeEach(() => {
       req = { params: {} };
       res = {};

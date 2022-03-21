@@ -7,6 +7,7 @@ const main = (
   capitalizedResourceName,
   useTypescript
 ) => {
+  const fileExtension = useTypescript ? 'ts' : 'js';
   // Check if controllers folder exists and create it if not
   if (!existsSync('src')) {
     mkdirSync('src');
@@ -18,7 +19,7 @@ const main = (
 
   if (useTypescript) {
     appendFileSync(
-      `src/controllers/${kebabCaseResourceName}.controller.js`,
+      `src/controllers/${kebabCaseResourceName}.controller.${fileExtension}`,
       `import { Request, Response } from 'express';`
     );
   }
@@ -30,7 +31,7 @@ const main = (
     if (moduleType === 'module' || useTypescript) {
       // If module type is ES6, use ES6 syntax for exports
       appendFileSync(
-        `src/controllers/${kebabCaseResourceName}.controller.js`,
+        `src/controllers/${kebabCaseResourceName}.controller.${fileExtension}`,
         `export const getAll${capitalizedResourceName}s = (req${
           useTypescript ? ': Request' : ''
         }, res${useTypescript ? ': Response' : ''}) => {
@@ -76,7 +77,7 @@ export const delete${capitalizedResourceName} = (req${
     } else {
       // If module type is commonjs, use commonjs syntax for exports
       appendFileSync(
-        `src/controllers/${kebabCaseResourceName}.controller.js`,
+        `src/controllers/${kebabCaseResourceName}.controller.${fileExtension}`,
         `const getAll${capitalizedResourceName}s = (req, res) => {
   res
     .status(200)
@@ -131,37 +132,39 @@ module.exports = {
       mkdirSync('src/db');
     }
 
-    if (moduleType === 'module') {
+    if (moduleType === 'module' || useTypescript) {
       // Create db file content with es6 exports
       appendFileSync(
-        `src/db/${kebabCaseResourceName}.db.js`,
+        `src/db/${kebabCaseResourceName}.db.${fileExtension}`,
         `export const getAll${capitalizedResourceName}sDB = async ()${
-          useTypescript ? 'string' : ''
+          useTypescript ? ': Promise<string>' : ''
         } => {
   return "This route get all ${capitalizedResourceName}s";
 };
 
-export const get${capitalizedResourceName}DB = async (id)${
-          useTypescript ? 'string' : ''
-        } => {
+export const get${capitalizedResourceName}DB = async (id${
+          useTypescript ? ': any' : ''
+        })${useTypescript ? ': Promise<string>' : ''} => {
   return "This route get ${capitalizedResourceName} with id " + id;
 };
 
-export const create${capitalizedResourceName}DB = async (new${capitalizedResourceName})${
-          useTypescript ? 'string' : ''
-        } => {
+export const create${capitalizedResourceName}DB = async (new${capitalizedResourceName}${
+          useTypescript ? ': any' : ''
+        })${useTypescript ? ': Promise<string>' : ''} => {
   return "This route create a ${capitalizedResourceName} with value " + JSON.stringify(new${capitalizedResourceName});
 };
 
-export const update${capitalizedResourceName}DB = async (id, updated${capitalizedResourceName})${
-          useTypescript ? 'string' : ''
+export const update${capitalizedResourceName}DB = async (id${
+          useTypescript ? ': any' : ''
+        }, updated${capitalizedResourceName}${useTypescript ? ': any' : ''})${
+          useTypescript ? ': Promise<string>' : ''
         } => {
   return "This route update ${capitalizedResourceName} with id " + id + " and value " + JSON.stringify(updated${capitalizedResourceName});
 };
 
-export const delete${capitalizedResourceName}DB = async (id)${
-          useTypescript ? 'string' : ''
-        } => {
+export const delete${capitalizedResourceName}DB = async (id${
+          useTypescript ? ': any' : ''
+        })${useTypescript ? ': Promise<string>' : ''} => {
   return "This route delete ${capitalizedResourceName} with id " + id;
 };
 `
@@ -169,7 +172,7 @@ export const delete${capitalizedResourceName}DB = async (id)${
     } else {
       // Create db file content with commonjs exports
       appendFileSync(
-        `src/db/${kebabCaseResourceName}.db.js`,
+        `src/db/${kebabCaseResourceName}.db.${fileExtension}`,
         `const getAll${capitalizedResourceName}sDB = async () => {
   return "This route get all ${capitalizedResourceName}s";
 };
@@ -206,7 +209,7 @@ module.exports = {
     // Imports depending of module type
     if (moduleType === 'module' || useTypescript) {
       appendFileSync(
-        `src/controllers/${kebabCaseResourceName}.controller.js`,
+        `src/controllers/${kebabCaseResourceName}.controller.${fileExtension}`,
         `import {
   getAll${capitalizedResourceName}sDB,
   get${capitalizedResourceName}DB, 
@@ -217,7 +220,7 @@ module.exports = {
       );
     } else {
       appendFileSync(
-        `src/controllers/${kebabCaseResourceName}.controller.js`,
+        `src/controllers/${kebabCaseResourceName}.controller.${fileExtension}`,
         `const { 
   getAll${capitalizedResourceName}sDB,
   get${capitalizedResourceName}DB, 
@@ -231,33 +234,33 @@ module.exports = {
     if (moduleType === 'module' || useTypescript) {
       // Create controller file content with es6 exports
       appendFileSync(
-        `src/controllers/${kebabCaseResourceName}.controller.js`,
+        `src/controllers/${kebabCaseResourceName}.controller.${fileExtension}`,
         `export const getAll${capitalizedResourceName}s = (req${
           useTypescript ? ': Request' : ''
         }, res${useTypescript ? ': Response' : ''}) => {
   getAll${capitalizedResourceName}sDB()
-    .then((data) => res.status(200).send(data));
+    .then((data${useTypescript ? ': any' : ''}) => res.status(200).send(data));
 };
 
 export const get${capitalizedResourceName} = (req${
           useTypescript ? ': Request' : ''
         }, res${useTypescript ? ': Response' : ''}) => {
   get${capitalizedResourceName}DB(req.params.id)
-    .then((data) => res.status(200).send(data));
+    .then((data${useTypescript ? ': any' : ''}) => res.status(200).send(data));
 };
 
 export const create${capitalizedResourceName} = (req${
           useTypescript ? ': Request' : ''
         }, res${useTypescript ? ': Response' : ''}) => {
   create${capitalizedResourceName}DB(req.body)
-    .then((data) => res.status(200).send(data));
+    .then((data${useTypescript ? ': any' : ''}) => res.status(200).send(data));
 };
 
 export const update${capitalizedResourceName} = (req${
           useTypescript ? ': Request' : ''
         }, res${useTypescript ? ': Response' : ''}) => {
   update${capitalizedResourceName}DB(req.params.id, req.body)
-    .then((data) => res.status(200).send(data));
+    .then((data${useTypescript ? ': any' : ''}) => res.status(200).send(data));
 };
 
 export const delete${capitalizedResourceName} = (req${
@@ -272,7 +275,7 @@ export const delete${capitalizedResourceName} = (req${
     } else {
       // Create controller file content with commonjs exports
       appendFileSync(
-        `src/controllers/${kebabCaseResourceName}.controller.js`,
+        `src/controllers/${kebabCaseResourceName}.controller.${fileExtension}`,
         `const getAll${capitalizedResourceName}s = (req, res) => {
   getAll${capitalizedResourceName}sDB().then((data) => res.status(200).send(data));
 };

@@ -6,6 +6,7 @@ const main = (
   capitalizedResourceName,
   useTypescript
 ) => {
+  const fileExtension = useTypescript ? 'ts' : 'js';
   // Check if routes folder exists and create it if not
   if (!existsSync('src')) {
     mkdirSync('src');
@@ -18,7 +19,7 @@ const main = (
   // Import controllers conditionals on module type for router file
   if (moduleType === 'module' || useTypescript) {
     appendFileSync(
-      `src/routes/${kebabCaseResourceName}.router.js`,
+      `src/routes/${kebabCaseResourceName}.router.${fileExtension}`,
       `import express from 'express';
 import { 
   getAll${capitalizedResourceName}s, 
@@ -34,7 +35,7 @@ import {
     );
   } else {
     appendFileSync(
-      `src/routes/${kebabCaseResourceName}.router.js`,
+      `src/routes/${kebabCaseResourceName}.router.${fileExtension}`,
       `const express = require('express');
    
 const { 
@@ -51,11 +52,11 @@ const {
 
   // Create router file content
   appendFileSync(
-    `src/routes/${kebabCaseResourceName}.router.js`,
+    `src/routes/${kebabCaseResourceName}.router.${fileExtension}`,
     `const router = express.Router();\n\n`
   );
   appendFileSync(
-    `src/routes/${kebabCaseResourceName}.router.js`,
+    `src/routes/${kebabCaseResourceName}.router.${fileExtension}`,
     `router
   .get('/', getAll${capitalizedResourceName}s)
   .get('/:id', get${capitalizedResourceName})
@@ -65,14 +66,14 @@ const {
   
 `
   );
-  if (moduleType === 'module') {
+  if (moduleType === 'module' || useTypescript) {
     appendFileSync(
-      `src/routes/${kebabCaseResourceName}.router.js`,
+      `src/routes/${kebabCaseResourceName}.router.${fileExtension}`,
       `export default router;\n\n`
     );
   } else {
     appendFileSync(
-      `src/routes/${kebabCaseResourceName}.router.js`,
+      `src/routes/${kebabCaseResourceName}.router.${fileExtension}`,
       `module.exports = router;\n\n`
     );
   }
