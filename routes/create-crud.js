@@ -14,7 +14,7 @@ const main = async () => {
     { type: 'input', message: 'Resource name:', name: 'resourceName' },
     {
       type: 'confirm',
-      message: 'Dou you want to extract db connection to new file?:',
+      message: 'Dou you want to extract db operations to new file?:',
       name: 'dbExtract',
       default: false,
     },
