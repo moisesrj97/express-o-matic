@@ -1,10 +1,12 @@
 import { appendFileSync, writeFileSync } from 'fs';
 
-const main = (moduleType) => {
-  if (moduleType === 'ES6 Modules') {
+const main = (moduleType, useTypeScript) => {
+  const fileExtension = useTypeScript ? 'ts' : 'js';
+
+  if (moduleType === 'ES6 Modules' || useTypeScript) {
     appendFileSync(
-      'e2e.test.js',
-      `import { app, server } from './index.js';
+      `src/e2e.test.${fileExtension}`,
+      `import { app, server } from './index${useTypeScript ? '' : '.js'}';
 import request from 'supertest';
 
 
@@ -12,7 +14,7 @@ import request from 'supertest';
     );
   } else {
     appendFileSync(
-      'e2e.test.js',
+      `src/e2e.test.${fileExtension}`,
       `const { app, server } = require('./index.js');
 const request = require('supertest');
 
@@ -20,7 +22,7 @@ const request = require('supertest');
     );
   }
   appendFileSync(
-    'e2e.test.js',
+    `src/e2e.test.${fileExtension}`,
     `describe('Given the express application', () => {
   afterEach(() => {
     server.close();

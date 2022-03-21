@@ -1,26 +1,46 @@
 import { execSync } from 'child_process';
 import inquirer from 'inquirer';
 
-import createProject from '../helpers/create-project.js';
+import createProject from '../helpers/utils/create-project.js';
 import addBabelTestPlugin from '../helpers/add-babel-test-plugin.js';
 import setModuleType from '../helpers/set-module-type.js';
-import installDependencies from '../helpers/install-dependencies.js';
+import installDependencies from '../helpers/utils/install-dependencies.js';
 import createIndexFile from '../helpers/create-index-file.js';
-import createGitRepo from '../helpers/create-git-repo.js';
+import createGitRepo from '../helpers/utils/create-git-repo.js';
 import generateIndexTest from '../helpers/generate-index-test.js';
 
-import { babelPluginName } from '../helpers/CONSTANTS.js';
+import { babelPluginName } from '../helpers/constants/CONSTANTS.js';
 import chalk from 'chalk';
+import { existsSync, writeFileSync } from 'fs';
 
 const main = async () => {
   // Collect inquirer questions
-  const { moduleType, middleWare, testingTools, repo } = await inquirer.prompt([
+
+  const { useTypeScript } = await inquirer.prompt([
     {
-      type: 'list',
-      name: 'moduleType',
-      message: 'What type of module do you want to use?',
-      choices: ['CommonJS', 'ES6 Modules'],
+      type: 'confirm',
+      name: 'useTypeScript',
+      message: 'Do you want to use TypeScript? (Y/n)',
+      default: true,
     },
+  ]);
+
+  let moduleType;
+
+  if (useTypeScript) {
+    moduleType = 'CommonJS';
+  } else {
+    ({ moduleType } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'moduleType',
+        message: 'What type of module do you want to use?',
+        choices: ['CommonJS', 'ES6 Modules'],
+      },
+    ]));
+  }
+
+  const { middleWare, testingTools, repo } = await inquirer.prompt([
     {
       type: 'checkbox',
       name: 'middleWare',
@@ -42,11 +62,16 @@ const main = async () => {
   ]);
 
   let babelPlugin = '';
-  if (testingTools.length > 0 && moduleType === 'ES6 Modules') {
+  if (
+    testingTools.length > 0 &&
+    moduleType === 'ES6 Modules' &&
+    !useTypeScript
+  ) {
     babelPlugin = babelPluginName;
   }
 
   // Install dependencies
+  console.log(chalk.blueBright('Using TypeScript:'), useTypeScript);
   console.log(chalk.blueBright('Module type:'), moduleType);
   console.log(chalk.blueBright('Dependencies to be installed:'));
   console.log(
@@ -81,23 +106,90 @@ const main = async () => {
       execSync('npm set-script test jest');
     }
 
-    execSync('npm set-script start "node index.js"');
+    if (useTypeScript) {
+      execSync('npm set-script build "tsc --project ."');
+      execSync('npm set-script start "tsc --project . && node dist/index.js"');
+      execSync('npm set-script start:dev "nodemon src/index.ts"');
+    } else {
+      execSync('npm set-script start "node index.js"');
+      execSync('npm set-script start:dev "nodemon index.js"');
+    }
 
     // Configure testing if es6 modules selected and test utils selected
-    if (testingTools.length > 0 && moduleType === 'ES6 Modules') {
+    if (
+      testingTools.length > 0 &&
+      moduleType === 'ES6 Modules' &&
+      !useTypeScript
+    ) {
       addBabelTestPlugin();
     }
 
+    const dependenciesArray = [...middleWare, ...testingTools, babelPlugin];
+
+    // Add TS dependencies if selected
+
+    if (useTypeScript) {
+      dependenciesArray.push(
+        'typescript',
+        'ts-node',
+        '@types/express',
+        '@types/node'
+      );
+
+      middleWare.forEach((e) => {
+        dependenciesArray.push(`@types/${e}`);
+      });
+    }
+
+    if (testingTools.includes('jest') && useTypeScript) {
+      dependenciesArray.push('@types/jest', 'ts-jest');
+      execSync('npx ts-jest config:init');
+    }
+
+    if (testingTools.includes('supertest') && useTypeScript) {
+      dependenciesArray.push('@types/supertest', 'ts-jest');
+      if (!existsSync('jest.config.js')) {
+        execSync('npx ts-jest config:init');
+      }
+    }
+
     // Install dependencies
-    installDependencies([...middleWare, ...testingTools, babelPlugin]);
+    installDependencies(dependenciesArray);
+
+    if (useTypeScript) {
+      writeFileSync(
+        'tsconfig.json',
+        JSON.stringify(
+          {
+            'compilerOptions': {
+              'target': 'es2016',
+              'module': 'commonjs',
+              'rootDir': './src',
+              'moduleResolution': 'node',
+              'baseUrl': './src',
+              'declaration': true,
+              'declarationMap': true,
+              'outDir': './dist',
+              'removeComments': true,
+              'esModuleInterop': true,
+              'forceConsistentCasingInFileNames': true,
+              'strict': true,
+              'skipLibCheck': true,
+            },
+          },
+          null,
+          2
+        )
+      );
+    }
 
     // Create index.js file
-    createIndexFile(moduleType, middleWare);
+    createIndexFile(moduleType, middleWare, useTypeScript);
 
     // Create e2e test if tests
 
     if (testingTools.includes('supertest')) {
-      generateIndexTest(moduleType);
+      generateIndexTest(moduleType, useTypeScript);
     }
 
     // Create git repository
@@ -111,7 +203,7 @@ const main = async () => {
     console.log('\n');
     console.log(
       'Run ',
-      chalk.greenBright('npm start'),
+      chalk.greenBright('npm run start:dev'),
       ' to start the server\n\n'
     );
   } else {

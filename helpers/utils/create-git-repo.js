@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import { writeFileSync } from 'fs';
 
-import gitIgnore from '../resources/git-ignore.js';
+import gitIgnore from '../../resources/git-ignore.js';
 
 const main = () => {
   execSync('git init');

@@ -1,24 +1,28 @@
-import { appendFileSync, writeFileSync } from 'fs';
+import { appendFileSync } from 'fs';
 
 const main = (
   dependencies,
   dbExtract,
   moduleType,
   kebabCaseResourceName,
-  capitalizedResourceName
+  capitalizedResourceName,
+  useTypescript
 ) => {
+  const fileExtension = useTypescript ? 'ts' : 'js';
   if (dependencies.hasOwnProperty('jest')) {
     // Controller
-    if (moduleType === 'ES6 Modules') {
+    if (moduleType === 'ES6 Modules' || useTypescript) {
       appendFileSync(
-        `controllers/${kebabCaseResourceName}.controller.test.js`,
+        `src/controllers/${kebabCaseResourceName}.controller.test.${fileExtension}`,
         `import {
   getAll${capitalizedResourceName}s, 
   get${capitalizedResourceName}, 
   create${capitalizedResourceName}, 
   update${capitalizedResourceName}, 
   delete${capitalizedResourceName},
-} from '../controllers/${kebabCaseResourceName}.controller.js';
+} from '../controllers/${kebabCaseResourceName}.controller${
+          useTypescript ? '' : '.js'
+        }';
 ${
   dbExtract
     ? `
@@ -28,19 +32,25 @@ import {
   create${capitalizedResourceName}DB, 
   update${capitalizedResourceName}DB, 
   delete${capitalizedResourceName}DB,
-} from '../db/${kebabCaseResourceName}.db.js';
+} from '../db/${kebabCaseResourceName}.db${useTypescript ? '' : '.js'}';
 
 `
     : ''
 }
-${dbExtract ? `jest.mock("../db/${kebabCaseResourceName}.db.js")` : ''}
+${
+  dbExtract
+    ? `jest.mock("../db/${kebabCaseResourceName}.db${
+        useTypescript ? '' : '.js'
+      }")`
+    : ''
+}
 
 
 `
       );
     } else {
       appendFileSync(
-        `controllers/${kebabCaseResourceName}.controller.test.js`,
+        `src/controllers/${kebabCaseResourceName}.controller.test.js`,
         `const {
   getAll${capitalizedResourceName}s, 
   get${capitalizedResourceName}, 
@@ -70,11 +80,24 @@ ${dbExtract ? `jest.mock("../db/${kebabCaseResourceName}.db.js")` : ''}
     }
 
     appendFileSync(
-      `controllers/${kebabCaseResourceName}.controller.test.js`,
+      `src/controllers/${kebabCaseResourceName}.controller.test.${fileExtension}`,
       `describe('Given the controller', () => {
-  let req;
-  let res;
-  let next;
+  let req${useTypescript ? ': any' : ''};
+  let res${useTypescript ? ': any' : ''};
+  let next${useTypescript ? ': any' : ''};
+
+  ${
+    dbExtract && useTypescript
+      ? `
+  
+  const mockedGetAll${capitalizedResourceName}sDB = getAll${capitalizedResourceName}sDB as jest.MockedFunction<typeof getAll${capitalizedResourceName}sDB>;
+  const mockedGet${capitalizedResourceName}DB = get${capitalizedResourceName}DB as jest.MockedFunction<typeof get${capitalizedResourceName}DB>;
+  const mockedCreate${capitalizedResourceName}DB = create${capitalizedResourceName}DB as jest.MockedFunction<typeof create${capitalizedResourceName}DB>;
+  const mockedUpdate${capitalizedResourceName}DB = update${capitalizedResourceName}DB as jest.MockedFunction<typeof update${capitalizedResourceName}DB>;
+  const mockedDelete${capitalizedResourceName}DB = delete${capitalizedResourceName}DB as jest.MockedFunction<typeof delete${capitalizedResourceName}DB>;
+`
+      : ''
+  }
   beforeEach(() => {
       req = { params: {} };
       res = {};
@@ -83,7 +106,19 @@ ${dbExtract ? `jest.mock("../db/${kebabCaseResourceName}.db.js")` : ''}
       res.status = jest.fn().mockReturnValue(res);
       next = jest.fn();
       ${
-        dbExtract
+        dbExtract && useTypescript
+          ? `
+      mockedGetAll${capitalizedResourceName}sDB.mockResolvedValue("This route get all ${capitalizedResourceName}s");
+      mockedGet${capitalizedResourceName}DB.mockResolvedValue("This route get ${capitalizedResourceName} with id " + 1);
+      mockedCreate${capitalizedResourceName}DB.mockResolvedValue("This route create a ${capitalizedResourceName} with value " + JSON.stringify({test: "test"}));
+      mockedUpdate${capitalizedResourceName}DB.mockResolvedValue("This route update ${capitalizedResourceName} with id " + 1+ " and value " + JSON.stringify({test: "test"}));
+      mockedDelete${capitalizedResourceName}DB.mockResolvedValue("This route delete ${capitalizedResourceName} with id " + 1);
+      
+      `
+          : ''
+      }
+      ${
+        dbExtract && !useTypescript
           ? `
       getAll${capitalizedResourceName}sDB.mockResolvedValue("This route get all ${capitalizedResourceName}s");
       get${capitalizedResourceName}DB.mockResolvedValue("This route get ${capitalizedResourceName} with id " + 1);
@@ -151,23 +186,23 @@ ${dbExtract ? `jest.mock("../db/${kebabCaseResourceName}.db.js")` : ''}
 
     if (dbExtract) {
       // DB
-      if (moduleType === 'ES6 Modules') {
+      if (moduleType === 'ES6 Modules' || useTypescript) {
         appendFileSync(
-          `db/${kebabCaseResourceName}.db.test.js`,
+          `src/db/${kebabCaseResourceName}.db.test.${fileExtension}`,
           `import {
   getAll${capitalizedResourceName}sDB, 
   get${capitalizedResourceName}DB, 
   create${capitalizedResourceName}DB, 
   update${capitalizedResourceName}DB, 
   delete${capitalizedResourceName}DB,
-} from '../db/${kebabCaseResourceName}.db.js';
+} from '../db/${kebabCaseResourceName}.db${useTypescript ? '' : '.js'}';
 
 
 `
         );
       } else {
         appendFileSync(
-          `db/${kebabCaseResourceName}.db.test.js`,
+          `src/db/${kebabCaseResourceName}.db.test.js`,
           `const {
   getAll${capitalizedResourceName}sDB, 
   get${capitalizedResourceName}DB, 
@@ -181,7 +216,7 @@ ${dbExtract ? `jest.mock("../db/${kebabCaseResourceName}.db.js")` : ''}
         );
       }
       appendFileSync(
-        `db/${kebabCaseResourceName}.db.test.js`,
+        `src/db/${kebabCaseResourceName}.db.test.${fileExtension}`,
         `describe('Given the db connection', () => {
   describe('When getAll is called', () => {
     test('It should return data',${dbExtract ? ' async' : ''} () => {
@@ -229,10 +264,10 @@ ${dbExtract ? `jest.mock("../db/${kebabCaseResourceName}.db.js")` : ''}
     dependencies.hasOwnProperty('jest') ||
     dependencies.hasOwnProperty('supertest')
   ) {
-    if (moduleType === 'ES6 Modules') {
+    if (moduleType === 'ES6 Modules' || useTypescript) {
       appendFileSync(
-        `routes/${kebabCaseResourceName}.router.test.js`,
-        `import { app, server } from '../index.js';
+        `src/routes/${kebabCaseResourceName}.router.test.${fileExtension}`,
+        `import { app, server } from '../index${useTypescript ? '' : '.js'}';
 import request from 'supertest';
 
 
@@ -240,7 +275,7 @@ import request from 'supertest';
       );
     } else {
       appendFileSync(
-        `routes/${kebabCaseResourceName}.router.test.js`,
+        `src/routes/${kebabCaseResourceName}.router.test.js`,
         `const { app, server } = require('../index.js');
 const request = require('supertest');
 
@@ -248,7 +283,7 @@ const request = require('supertest');
       );
     }
     appendFileSync(
-      `routes/${kebabCaseResourceName}.router.test.js`,
+      `src/routes/${kebabCaseResourceName}.router.test.${fileExtension}`,
       `describe('Given the express application', () => {
   afterEach(() => {
     server.close();

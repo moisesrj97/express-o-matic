@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import changePackageJsonDescription from './change-package-json-description.js';
+import changePackageJsonDescription from '../change-package-json-description.js';
 
 const main = () => {
   // Initialize the npm project
