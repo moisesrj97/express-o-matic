@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { babelPluginName } from './CONSTANTS.js';
+import { babelPluginName } from './constants/CONSTANTS.js';
 
 const main = () => {
   const json = JSON.parse(readFileSync('package.json'));

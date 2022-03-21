@@ -1,15 +1,15 @@
 import { execSync } from 'child_process';
 import inquirer from 'inquirer';
 
-import createProject from '../helpers/create-project.js';
+import createProject from '../helpers/utils/create-project.js';
 import addBabelTestPlugin from '../helpers/add-babel-test-plugin.js';
 import setModuleType from '../helpers/set-module-type.js';
-import installDependencies from '../helpers/install-dependencies.js';
+import installDependencies from '../helpers/utils/install-dependencies.js';
 import createIndexFile from '../helpers/create-index-file.js';
-import createGitRepo from '../helpers/create-git-repo.js';
+import createGitRepo from '../helpers/utils/create-git-repo.js';
 import generateIndexTest from '../helpers/generate-index-test.js';
 
-import { babelPluginName } from '../helpers/CONSTANTS.js';
+import { babelPluginName } from '../helpers/constants/CONSTANTS.js';
 import chalk from 'chalk';
 import { existsSync, writeFileSync } from 'fs';
 

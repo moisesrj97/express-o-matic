@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import processResourceName from '../helpers/process-resource-name.js';
+import processResourceName from '../helpers/utils/process-resource-name.js';
 
 import {
   readFileSync,
