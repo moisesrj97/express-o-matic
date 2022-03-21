@@ -33,15 +33,23 @@ const main = async () => {
   const moduleType = JSON.parse(readFileSync('package.json')).type;
   const dependencies = JSON.parse(readFileSync('package.json')).dependencies;
 
+  const useTypescript = dependencies.typescript;
+
   // Create router file
-  createRouterFile(moduleType, kebabCaseResourceName, capitalizedResourceName);
+  createRouterFile(
+    moduleType,
+    kebabCaseResourceName,
+    capitalizedResourceName,
+    useTypescript
+  );
 
   // Create controller file
   createControllerFile(
     dbExtract,
     moduleType,
     kebabCaseResourceName,
-    capitalizedResourceName
+    capitalizedResourceName,
+    useTypescript
   );
 
   // Generate router and controller test file
@@ -50,14 +58,15 @@ const main = async () => {
     dbExtract,
     moduleType,
     kebabCaseResourceName,
-    capitalizedResourceName
+    capitalizedResourceName,
+    useTypescript
   );
 
   console.log(
     '\n\n',
     chalk.redBright('Remember'),
     'to import the router on',
-    chalk.blueBright('index.js'),
+    chalk.blueBright(`index.${useTypescript ? 'ts' : 'js'}`),
     'and add it to the',
     chalk.bold('app.use()'),
     'method!\n\n'
